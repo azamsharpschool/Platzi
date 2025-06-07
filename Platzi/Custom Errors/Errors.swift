@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct ErrorResponse: Codable {
-    let message: String?
+enum SampleError: Error {
+    case operationFailed
 }

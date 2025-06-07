@@ -160,8 +160,6 @@ struct MockHTTPClient: HTTPClientProtocol {
     
     func load<T>(_ resource: Resource<T>) async throws -> T where T : Decodable, T : Encodable {
         
-        try! await Task.sleep(for: .seconds(2.0))
-        
         switch resource.endpoint {
         case .categories:
             return PreviewData.load("categories")

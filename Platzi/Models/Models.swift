@@ -12,3 +12,7 @@ struct Category: Codable, Identifiable {
     let name: String
     let image: URL
 }
+
+struct ErrorResponse: Codable {
+    let message: String?
+}

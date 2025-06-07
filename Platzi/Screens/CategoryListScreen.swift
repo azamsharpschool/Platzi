@@ -26,19 +26,20 @@ struct CategoryListScreen: View {
             loadingState = .failure(error)
         }
     }
-    
+      
     var body: some View {
         Group {
             switch loadingState {
             case .loading:
                 ProgressView("Loading...")
+                    .task {
+                        await loadCategories()
+                    }
             case .success(let categories):
                 CategoryListView(categories: categories)
             case .failure(let error):
-                Text(error.localizedDescription)
+                ErrorView(error: error)
             }
-        }.task {
-            await loadCategories()
         }
     }
 }
