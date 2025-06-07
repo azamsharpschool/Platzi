@@ -10,31 +10,36 @@ import SwiftUI
 struct CategoryListScreen: View {
     
     @Environment(PlatziStore.self) private var store
+    @State private var loadingState: LoadingState = .loading
+    
+    private enum LoadingState {
+        case loading
+        case success([Category])
+        case failure(Error)
+    }
     
     private func loadCategories() async {
         do {
             try await store.loadCategories()
+            loadingState = .success(store.categories)
         } catch {
-            print(error.localizedDescription)
+            loadingState = .failure(error)
         }
     }
     
     var body: some View {
-        List(store.categories) { category in
-            HStack {
-                AsyncImage(url: category.image) { image in
-                    image.resizable()
-                        .frame(width: 75, height: 75)
-                } placeholder: {
-                    Image(systemName: "photo")
-                        .placeholder(width: 75, height: 75)
-                }
-
-                Text(category.name)
+        Group {
+            switch loadingState {
+            case .loading:
+                ProgressView("Loading...")
+            case .success(let categories):
+                CategoryListView(categories: categories)
+            case .failure(let error):
+                Text(error.localizedDescription)
             }
         }.task {
             await loadCategories()
-        }.navigationTitle("Categories")
+        }
     }
 }
 
