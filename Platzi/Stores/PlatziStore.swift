@@ -30,4 +30,8 @@ class PlatziStore {
         products = try await httpClient.load(resource)
     }
     
+    func createProduct(_ product: Product) async throws {
+        //let resource = Resource(endpoint: .addProduct, modelType: <#T##(Decodable & Encodable).Type#>)
+    }
+    
 }

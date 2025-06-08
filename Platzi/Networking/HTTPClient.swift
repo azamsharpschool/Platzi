@@ -14,6 +14,7 @@ protocol HTTPClientProtocol {
 enum Endpoint {
     case categories
     case productsByCategory(Int)
+    case createProduct
     
     var url: URL {
         let base = "https://api.escuelajs.co/api/v1"
@@ -23,6 +24,8 @@ enum Endpoint {
             return URL(string: "\(base)/categories")!
         case .productsByCategory(let categoryId):
             return URL(string: "\(base)/categories/\(categoryId)/products")!
+        case .createProduct:
+            return URL(string: "\(base)/products")!
         }
     }
 }
@@ -166,6 +169,9 @@ struct MockHTTPClient: HTTPClientProtocol {
             return PreviewData.load("categories")
         case .productsByCategory(_):
             return PreviewData.load("products")
+        case .createProduct:
+            let categories: [Category] = PreviewData.load("categories")
+            return Product(id: 1, title: "New Product", price: 200, description: "New Product Description", category: categories[0], images: []) as! T
         }
     }
 }
