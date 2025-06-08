@@ -13,6 +13,7 @@ struct ProductListScreen: View {
     
     @Environment(PlatziStore.self) private var store
     @State private var selectedProduct: Product?
+    @State private var showAddProductScreen: Bool = false
     
     var body: some View {
         ProductListView(products: store.products, selectedProduct: $selectedProduct)
@@ -27,6 +28,16 @@ struct ProductListScreen: View {
                 ProductDetailScreen(product: selectedProduct)
             })
         .navigationTitle(category.name)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Add Product") {
+                    showAddProductScreen = true
+                }
+            }
+        }
+        .sheet(isPresented: $showAddProductScreen) {
+            AddProductScreen() 
+        }
     }
 }
 

@@ -39,7 +39,7 @@ struct CategoryListScreen: View {
             case .success(let categories):
                 CategoryListView(categories: categories, selectedCategory: $selectedCategory)
             case .failure(let error):
-                ErrorView(error: error)
+                ToastView(type: .error(error.localizedDescription))
             }
         }
         .navigationTitle("Platzi")

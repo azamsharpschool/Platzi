@@ -18,4 +18,10 @@ extension View {
             .clipShape(RoundedRectangle(cornerRadius: 10.0, style: .continuous))
             .listRowSeparator(.hidden)
     }
+    
+    
+    func withToast() -> some View {
+        modifier(ToastModifier())
+    }
+    
 }
