@@ -49,6 +49,7 @@ struct AddProductScreen: View {
                 TextField("Price", value: $addProductForm.price, format: .number)
                     .keyboardType(.numberPad)
                 TextField("Description", text: $addProductForm.description, axis: .vertical)
+                
             }
         .navigationTitle("Add Product")
             .toolbar {
