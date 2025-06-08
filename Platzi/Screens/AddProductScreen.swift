@@ -10,6 +10,7 @@ import SwiftUI
 struct AddProductScreen: View {
     
     private struct AddProductForm {
+        
         var title: String = ""
         var price: Double?
         var description: String = ""
@@ -18,20 +19,20 @@ struct AddProductScreen: View {
             
             var errors: [String] = []
             
-            if title.isEmptyOrWhitespace {
-                errors.append("Title is empty.")
+            if title.isEmpty {
+                errors.append("Title is required.")
             }
             
-            if let price = price {
-                if price <= 0 {
-                    errors.append("Price must be greater than 0.")
+            if let price {
+                if price < 0 {
+                    errors.append("Price should be greater than 0.")
                 }
             } else {
                 errors.append("Price is required.")
             }
             
-            if description.isEmptyOrWhitespace {
-                errors.append("Description is empty.")
+            if description.isEmpty {
+                errors.append("Description is required.")
             }
             
             return errors
@@ -39,23 +40,27 @@ struct AddProductScreen: View {
     }
     
     @State private var addProductForm = AddProductForm()
+    @State private var errors: [String] = []
     @Environment(\.showToast) private var showToast
     
     var body: some View {
-        Form {
-            TextField("Title", text: $addProductForm.title)
-            TextField("Price", value: $addProductForm.price, format: .number)
-                .keyboardType(.numberPad)
-            TextField("Description", text: $addProductForm.description, axis: .vertical)
-        }.navigationTitle("Add Product")
+            Form {
+                TextField("Title", text: $addProductForm.title)
+                TextField("Price", value: $addProductForm.price, format: .number)
+                    .keyboardType(.numberPad)
+                TextField("Description", text: $addProductForm.description, axis: .vertical)
+            }
+        .navigationTitle("Add Product")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Save") {
+                        errors = addProductForm.validate()
                         
-                        let errors = addProductForm.validate()
-                        
-                        if !errors.isEmpty
-                        
+                        if !errors.isEmpty {
+                            showToast(.error(errors.joinedWithNewlines()))
+                        } else {
+                            // add the product
+                        }
                     }
                 }
             }

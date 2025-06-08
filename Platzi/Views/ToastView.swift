@@ -24,11 +24,11 @@ enum ToastType {
     var backgroundColor: Color {
         switch self {
             case .success:
-                return Color.green.opacity(0.9)
+                return Color.green.opacity(1.0)
             case .error:
-                return Color.red.opacity(0.9)
+                return Color.red.opacity(1.0)
             case .info:
-                return Color.blue.opacity(0.9)
+                return Color.blue.opacity(1.0)
         }
     }
     
@@ -57,18 +57,20 @@ struct ToastView: View {
     let type: ToastType
     
     var body: some View {
-        HStack(alignment: .center, spacing: 10) {
+        HStack(alignment: .top, spacing: 10) {
             type.icon
                 .foregroundStyle(.white)
             Text(type.message)
                 .foregroundColor(.white)
                 .font(.subheadline)
                 .multilineTextAlignment(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
         }  .padding()
             .background(type.backgroundColor)
             .cornerRadius(12)
             .shadow(radius: 4)
             .padding(.horizontal, 16)
+           
     }
 }
 
@@ -101,7 +103,7 @@ struct ToastModifier: ViewModifier {
             .overlay(alignment: .top) {
                 if let type {
                     ToastView(type: type)
-                        .transition(.move(edge: .top).combined(with: .opacity))
+                        .transition(.move(edge: .top))
                         .padding(.top, 50)
                 }
             }
