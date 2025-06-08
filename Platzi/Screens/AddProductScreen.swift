@@ -13,6 +13,29 @@ struct AddProductScreen: View {
         var title: String = ""
         var price: Double?
         var description: String = ""
+        
+        func validate() -> [String] {
+            
+            var errors: [String] = []
+            
+            if title.isEmptyOrWhitespace {
+                errors.append("Title is empty.")
+            }
+            
+            if let price = price {
+                if price <= 0 {
+                    errors.append("Price must be greater than 0.")
+                }
+            } else {
+                errors.append("Price is required.")
+            }
+            
+            if description.isEmptyOrWhitespace {
+                errors.append("Description is empty.")
+            }
+            
+            return errors
+        }
     }
     
     @State private var addProductForm = AddProductForm()
@@ -28,6 +51,10 @@ struct AddProductScreen: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Save") {
+                        
+                        let errors = addProductForm.validate()
+                        
+                        if !errors.isEmpty
                         
                     }
                 }
