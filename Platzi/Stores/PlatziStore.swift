@@ -26,7 +26,8 @@ class PlatziStore {
     }
     
     func loadProductsBy(categoryId: Int) async throws {
-        
+        let resource = Resource(endpoint: .productsByCategory(categoryId), modelType: [Product].self)
+        products = try await httpClient.load(resource)
     }
     
 }

@@ -11,7 +11,9 @@ import SwiftUI
 struct PlatziApp: App {
     var body: some Scene {
         WindowGroup {
-            CategoryListScreen() 
+            NavigationStack {
+                CategoryListScreen()
+            }.environment(PlatziStore(httpClient: HTTPClient()))
         }
     }
 }

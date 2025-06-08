@@ -11,9 +11,22 @@ struct ProductListScreen: View {
     
     let category: Category
     
+    @Environment(PlatziStore.self) private var store
+    @State private var selectedProduct: Product?
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-            .navigationTitle(category.name)
+        ProductListView(products: store.products, selectedProduct: $selectedProduct)
+            .task {
+                do {
+                    try await store.loadProductsBy(categoryId: category.id)
+                } catch {
+                    print(error)
+                }
+            }
+            .navigationDestination(item: $selectedProduct, destination: { selectedProduct in
+                ProductDetailScreen(product: selectedProduct)
+            })
+        .navigationTitle(category.name)
     }
 }
 
@@ -22,4 +35,5 @@ struct ProductListScreen: View {
     NavigationStack {
         ProductListScreen(category: categories[0])
     }
+    .environment(PlatziStore(httpClient: MockHTTPClient()))
 }

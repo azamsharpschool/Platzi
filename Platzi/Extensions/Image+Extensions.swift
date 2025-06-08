@@ -18,4 +18,12 @@ extension Image {
             .frame(width: width, height: height)
     }
     
+    func rounded(width: CGFloat, height: CGFloat) -> some View {
+        self
+            .resizable()
+            .scaledToFit()
+            .frame(width: width, height: width)
+            .clipShape(RoundedRectangle(cornerRadius: 16.0, style: .continuous))
+    }
+    
 }

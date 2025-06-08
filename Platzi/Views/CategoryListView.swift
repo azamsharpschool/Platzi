@@ -21,6 +21,25 @@ struct CategoryListView: View {
     }
 }
 
+struct CategoryCellView: View {
+    
+    let category: Category
+    
+    var body: some View {
+        HStack {
+            AsyncImage(url: category.image) { image in
+                image.resizable()
+                    .frame(width: 75, height: 75)
+            } placeholder: {
+                Image(systemName: "photo")
+                    .placeholder(width: 75, height: 75)
+            }
+            
+            Text(category.name)
+        }
+    }
+}
+
 #Preview {
     NavigationStack {
         CategoryListView(categories: PreviewData.load("categories"), selectedCategory: .constant(nil))

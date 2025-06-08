@@ -13,13 +13,17 @@ struct Category: Codable, Identifiable, Hashable {
     let image: URL
 }
 
-struct Product: Codable, Identifiable {
+struct Product: Codable, Identifiable, Hashable {
     let id: Int
     let title: String
     let price: Int
     let description: String
     let category: Category
     let images: [URL]
+    
+    var heroImage: URL? {
+        images.first
+    }
 }
 
 struct ErrorResponse: Codable {
