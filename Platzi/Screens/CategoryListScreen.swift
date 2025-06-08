@@ -11,6 +11,7 @@ struct CategoryListScreen: View {
     
     @Environment(PlatziStore.self) private var store
     @State private var loadingState: LoadingState = .loading
+    @State private var selectedCategory: Category?
     
     private enum LoadingState {
         case loading
@@ -36,10 +37,12 @@ struct CategoryListScreen: View {
                         await loadCategories()
                     }
             case .success(let categories):
-                CategoryListView(categories: categories)
+                CategoryListView(categories: categories, selectedCategory: $selectedCategory)
             case .failure(let error):
                 ErrorView(error: error)
             }
+        }.navigationDestination(item: $selectedCategory) { selectedCategory in
+            ProductListScreen(category: selectedCategory)
         }
     }
 }
