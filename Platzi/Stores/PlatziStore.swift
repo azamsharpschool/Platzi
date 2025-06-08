@@ -13,6 +13,7 @@ import Observation
 class PlatziStore {
     
     var categories: [Category] = []
+    var products: [Product] = []
     let httpClient: HTTPClientProtocol
     
     init(httpClient: HTTPClientProtocol) {
@@ -22,6 +23,10 @@ class PlatziStore {
     func loadCategories() async throws {
         let resource = Resource(endpoint: .categories, modelType: [Category].self)
         categories = try await httpClient.load(resource)
+    }
+    
+    func loadProductsBy(categoryId: Int) async throws {
+        
     }
     
 }

@@ -17,7 +17,7 @@ struct CategoryListView: View {
             NavigationLink(value: category) {
                 CategoryCellView(category: category)
             }
-        }
+        }.listStyle(.plain)
     }
 }
 

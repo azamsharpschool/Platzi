@@ -13,6 +13,15 @@ struct Category: Codable, Identifiable, Hashable {
     let image: URL
 }
 
+struct Product: Codable, Identifiable {
+    let id: Int
+    let title: String
+    let price: Int
+    let description: String
+    let category: Category
+    let images: [URL]
+}
+
 struct ErrorResponse: Codable {
     let message: String?
 }

@@ -41,7 +41,9 @@ struct CategoryListScreen: View {
             case .failure(let error):
                 ErrorView(error: error)
             }
-        }.navigationDestination(item: $selectedCategory) { selectedCategory in
+        }
+        .navigationTitle("Platzi")
+        .navigationDestination(item: $selectedCategory) { selectedCategory in
             ProductListScreen(category: selectedCategory)
         }
     }

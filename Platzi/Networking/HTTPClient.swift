@@ -13,6 +13,7 @@ protocol HTTPClientProtocol {
 
 enum Endpoint {
     case categories
+    case productsByCategory(Int)
     
     var url: URL {
         let base = "https://api.escuelajs.co/api/v1"
@@ -20,6 +21,8 @@ enum Endpoint {
         switch self {
         case .categories:
             return URL(string: "\(base)/categories")!
+        case .productsByCategory(let categoryId):
+            return URL(string: "\(base)/categories/\(categoryId)/products")!
         }
     }
 }
@@ -75,11 +78,9 @@ struct Resource<T: Codable> {
     
 }
 
-
 struct HTTPClient: HTTPClientProtocol {
     
     private let session: URLSession
-    
     
     init() {
         
@@ -163,6 +164,8 @@ struct MockHTTPClient: HTTPClientProtocol {
         switch resource.endpoint {
         case .categories:
             return PreviewData.load("categories")
+        case .productsByCategory(_):
+            return PreviewData.load("products")
         }
     }
 }
