@@ -185,8 +185,7 @@ struct MockHTTPClient: HTTPClientProtocol {
             let categories: [Category] = PreviewData.load("categories")
             return Product(id: 1, title: "New Product", price: 200, description: "New Product Description", category: categories[0], images: []) as! T
         case .deleteProduct(_):
-            let categories: [Category] = PreviewData.load("categories")
-            return Product(id: 1, title: "New Product", price: 200, description: "New Product Description", category: categories[0], images: []) as! T
+            return true as! T 
         }
     }
 }
