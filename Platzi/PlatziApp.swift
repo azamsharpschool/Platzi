@@ -13,7 +13,9 @@ struct PlatziApp: App {
         WindowGroup {
             NavigationStack {
                 CategoryListScreen()
-            }.environment(PlatziStore(httpClient: HTTPClient()))
+            }
+            .environment(PlatziStore(httpClient: HTTPClient()))
+            .withToast()
         }
     }
 }

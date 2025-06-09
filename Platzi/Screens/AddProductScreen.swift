@@ -15,10 +15,12 @@ struct AddProductScreen: View {
     @State private var errors: [String] = []
     @Environment(PlatziStore.self) private var store
     @Environment(\.showToast) private var showToast
+    @Environment(\.dismiss) private var dismiss
     
     private func createProduct(_ createProductRequest: CreateProductRequest) async {
         do {
             try await store.createProduct(createProductRequest)
+            dismiss()
         } catch {
             showToast(.error(error.localizedDescription))
         }

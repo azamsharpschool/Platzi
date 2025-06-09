@@ -11,24 +11,45 @@ struct ProductListScreen: View {
     
     let category: Category
     
+    private enum LoadingState {
+        case loading
+        case success([Product])
+        case failure(Error)
+    }
+    
     @Environment(PlatziStore.self) private var store
     @State private var selectedProduct: Product?
     @State private var showAddProductScreen: Bool = false
-    
     @Environment(\.showToast) private var showToast
+    @State private var loadingState: LoadingState = .loading
+    
+    private func loadProductsByCategory() async {
+        
+        do {
+            try await store.loadProductsBy(categoryId: category.id)
+            loadingState = .success(store.products)
+        } catch {
+            loadingState = .failure(error)
+        }
+    }
     
     var body: some View {
-        ProductListView(products: store.products, selectedProduct: $selectedProduct)
-            .task {
-                do {
-                    try await store.loadProductsBy(categoryId: category.id)
-                } catch {
-                    showToast(.error(error.localizedDescription))
-                }
+        Group {
+            switch loadingState {
+            case .loading:
+                ProgressView("Loading products...")
+                    .task {
+                        await loadProductsByCategory()
+                    }
+            case .success(let products):
+                ProductListView(products: products, selectedProduct: $selectedProduct)
+            case .failure(let error):
+                ToastView(type: .error(error.localizedDescription))
             }
-            .navigationDestination(item: $selectedProduct, destination: { selectedProduct in
-                ProductDetailScreen(product: selectedProduct)
-            })
+        }
+        .navigationDestination(item: $selectedProduct, destination: { selectedProduct in
+            ProductDetailScreen(product: selectedProduct)
+        })
         .navigationTitle(category.name)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {

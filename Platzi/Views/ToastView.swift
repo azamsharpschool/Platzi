@@ -100,10 +100,10 @@ struct ToastModifier: ViewModifier {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: task)
                 
             }))
-            .overlay(alignment: .top) {
+            .overlay(alignment: .bottom) {
                 if let type {
                     ToastView(type: type)
-                        .transition(.move(edge: .top))
+                        .transition(.move(edge: .bottom))
                         .padding(.top, 50)
                 }
             }
