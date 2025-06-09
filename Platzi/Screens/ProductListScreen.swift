@@ -15,13 +15,15 @@ struct ProductListScreen: View {
     @State private var selectedProduct: Product?
     @State private var showAddProductScreen: Bool = false
     
+    @Environment(\.showToast) private var showToast
+    
     var body: some View {
         ProductListView(products: store.products, selectedProduct: $selectedProduct)
             .task {
                 do {
                     try await store.loadProductsBy(categoryId: category.id)
                 } catch {
-                    print(error)
+                    showToast(.error(error.localizedDescription))
                 }
             }
             .navigationDestination(item: $selectedProduct, destination: { selectedProduct in
@@ -37,7 +39,7 @@ struct ProductListScreen: View {
         }
         .sheet(isPresented: $showAddProductScreen) {
             NavigationStack {
-                AddProductScreen()
+                AddProductScreen(category: category)
                     .withToast()
             }
         }
@@ -50,4 +52,5 @@ struct ProductListScreen: View {
         ProductListScreen(category: categories[0])
     }
     .environment(PlatziStore(httpClient: MockHTTPClient()))
+    .withToast()
 }

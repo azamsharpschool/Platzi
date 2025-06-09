@@ -30,10 +30,10 @@ class PlatziStore {
         products = try await httpClient.load(resource)
     }
     
-    func createProduct(_ product: Product) async throws {
+    func createProduct(_ createProductRequest: CreateProductRequest) async throws {
         
-        let productBody = try JSONEncoder().encode(product)
-        let resource = Resource(endpoint: .createProduct, method: .post(productBody), modelType: Product.self)
+        let body = try JSONEncoder().encode(createProductRequest)
+        let resource = Resource(endpoint: .createProduct, method: .post(body), modelType: Product.self)
         let newProduct = try await httpClient.load(resource)
         print(newProduct)
         products.append(newProduct)

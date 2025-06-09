@@ -32,9 +32,9 @@ struct ErrorResponse: Codable {
 
 struct CreateProductRequest: Encodable {
     let title: String
-    let price: Double
+    let price: Int
     let description: String
     let categoryId: Int
-    let images: [String]
+    let images: [URL]
 }
 
