@@ -35,8 +35,16 @@ class PlatziStore {
         let body = try JSONEncoder().encode(createProductRequest)
         let resource = Resource(endpoint: .createProduct, method: .post(body), modelType: Product.self)
         let newProduct = try await httpClient.load(resource)
-        print(newProduct)
         products.append(newProduct)
+    }
+    
+    func deleteProduct(productId: Int) async throws {
+        
+        let resource = Resource(endpoint: .deleteProduct(productId), method: .delete, modelType: Bool.self)
+        let isDeleted = try await httpClient.load(resource)
+        if isDeleted {
+            products = products.filter { $0.id! != productId }
+        }
     }
     
 }

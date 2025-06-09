@@ -26,7 +26,17 @@ struct ProductListScreen: View {
     private func loadProductsByCategory() async {
         
         do {
+            loadingState = .loading
             try await store.loadProductsBy(categoryId: category.id)
+            loadingState = .success(store.products)
+        } catch {
+            loadingState = .failure(error)
+        }
+    }
+    
+    private func deleteProduct(product: Product) async {
+        do {
+            try await store.deleteProduct(productId: product.id!)
             loadingState = .success(store.products)
         } catch {
             loadingState = .failure(error)
@@ -35,13 +45,11 @@ struct ProductListScreen: View {
     
     var body: some View {
         Group {
-           
             switch loadingState {
             case .loading:
                 ProgressView("Loading products...")
             case .success(let products):
-                let _ = print("success products")
-                ProductListView(products: products, selectedProduct: $selectedProduct)
+                    ProductListView(products: products, selectedProduct: $selectedProduct, onDelete: deleteProduct)
             case .failure(let error):
                 ToastView(type: .error(error.localizedDescription))
             }

@@ -15,6 +15,7 @@ enum Endpoint {
     case categories
     case productsByCategory(Int)
     case createProduct
+    case deleteProduct(Int)
     
     var url: URL {
         let base = "https://api.escuelajs.co/api/v1"
@@ -26,6 +27,8 @@ enum Endpoint {
             return URL(string: "\(base)/categories/\(categoryId)/products")!
         case .createProduct:
             return URL(string: "\(base)/products")!
+        case .deleteProduct(let productId):
+            return URL(string: "\(base)/products/\(productId)")!
         }
     }
 }
@@ -154,8 +157,15 @@ struct HTTPClient: HTTPClientProtocol {
             
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .iso8601
-            let result = try decoder.decode(resource.modelType, from: data)
-            return result
+            
+            if resource.modelType == Bool.self {
+                let result = try decoder.decode(Bool.self, from: data)
+                return result as! T
+            } else {
+                let result = try decoder.decode(resource.modelType, from: data)
+                return result
+            }
+           
         } catch {
             throw NetworkError.decodingError(error)
         }
@@ -172,6 +182,9 @@ struct MockHTTPClient: HTTPClientProtocol {
         case .productsByCategory(_):
             return PreviewData.load("products")
         case .createProduct:
+            let categories: [Category] = PreviewData.load("categories")
+            return Product(id: 1, title: "New Product", price: 200, description: "New Product Description", category: categories[0], images: []) as! T
+        case .deleteProduct(_):
             let categories: [Category] = PreviewData.load("categories")
             return Product(id: 1, title: "New Product", price: 200, description: "New Product Description", category: categories[0], images: []) as! T
         }

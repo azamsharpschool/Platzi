@@ -38,3 +38,7 @@ struct CreateProductRequest: Encodable {
     let images: [URL]
 }
 
+
+
+
+

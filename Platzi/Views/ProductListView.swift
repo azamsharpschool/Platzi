@@ -11,11 +11,22 @@ struct ProductListView: View {
     
     let products: [Product]
     @Binding var selectedProduct: Product?
+    let onDelete: (Product) async -> Void
     
     var body: some View {
-        List(products, selection: $selectedProduct) { product in
-            NavigationLink(value: product) {
-                ProductCellView(product: product)
+        List {
+            ForEach(products) { product in
+                NavigationLink(value: product) {
+                    ProductCellView(product: product)
+                        .onTapGesture {
+                            selectedProduct = product
+                        }
+                }
+            }.onDelete { indexSet in
+                for index in indexSet {
+                    let productToDelete = products[index]
+                    Task { await onDelete(productToDelete) }
+                }
             }
         }
     }
@@ -47,5 +58,5 @@ struct ProductCellView: View {
 }
 
 #Preview {
-    ProductListView(products: PreviewData.load("products"), selectedProduct: .constant(nil))
+    ProductListView(products: PreviewData.load("products"), selectedProduct: .constant(nil), onDelete: { _ in })
 }
