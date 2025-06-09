@@ -35,16 +35,22 @@ struct ProductListScreen: View {
     
     var body: some View {
         Group {
+           
             switch loadingState {
             case .loading:
                 ProgressView("Loading products...")
-                    .task {
-                        await loadProductsByCategory()
-                    }
             case .success(let products):
+                let _ = print("success products")
                 ProductListView(products: products, selectedProduct: $selectedProduct)
             case .failure(let error):
                 ToastView(type: .error(error.localizedDescription))
+            }
+        }
+        .task(id: store.products) {
+            if store.products.isEmpty {
+                await loadProductsByCategory()
+            } else {
+                loadingState = .success(store.products)
             }
         }
         .navigationDestination(item: $selectedProduct, destination: { selectedProduct in
