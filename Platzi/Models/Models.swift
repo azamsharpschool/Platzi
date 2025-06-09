@@ -14,7 +14,7 @@ struct Category: Codable, Identifiable, Hashable {
 }
 
 struct Product: Codable, Identifiable, Hashable {
-    let id: Int
+    var id: Int?
     let title: String
     let price: Int
     let description: String
@@ -29,3 +29,12 @@ struct Product: Codable, Identifiable, Hashable {
 struct ErrorResponse: Codable {
     let message: String?
 }
+
+struct CreateProductRequest: Encodable {
+    let title: String
+    let price: Double
+    let description: String
+    let categoryId: Int
+    let images: [String]
+}
+

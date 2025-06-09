@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol HTTPClientProtocol {
+protocol HTTPClientProtocol: Sendable {
     func load<T: Codable>(_ resource: Resource<T>) async throws -> T
 }
 
@@ -94,19 +94,21 @@ struct HTTPClient: HTTPClientProtocol {
     
     func load<T: Codable>(_ resource: Resource<T>) async throws -> T {
         
-        var headers: [String: String] = [: ]
+        //var headers: [String: String] = [: ]
         
+        /*
         // Get the token from keychain
         if let token = Keychain<String>.get("jwttoken") {
             headers["Authorization"] = "Bearer \(token)"
-        }
+        } */
         
         var request = URLRequest(url: resource.endpoint.url)
         
+        /*
         // Add headers to the request
         for (key, value) in headers {
             request.setValue(value, forHTTPHeaderField: key)
-        }
+        } */
         
         // Set HTTP method and body if needed
         switch resource.method {

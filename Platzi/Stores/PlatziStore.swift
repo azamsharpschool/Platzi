@@ -31,7 +31,12 @@ class PlatziStore {
     }
     
     func createProduct(_ product: Product) async throws {
-        //let resource = Resource(endpoint: .addProduct, modelType: <#T##(Decodable & Encodable).Type#>)
+        
+        let productBody = try JSONEncoder().encode(product)
+        let resource = Resource(endpoint: .createProduct, method: .post(productBody), modelType: Product.self)
+        let newProduct = try await httpClient.load(resource)
+        print(newProduct)
+        products.append(newProduct)
     }
     
 }

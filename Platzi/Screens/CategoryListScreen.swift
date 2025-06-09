@@ -54,4 +54,5 @@ struct CategoryListScreen: View {
         CategoryListScreen()
     }
     .environment(PlatziStore(httpClient: MockHTTPClient()))
+    .withToast()
 }
